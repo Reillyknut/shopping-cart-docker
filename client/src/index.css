@@ -160,9 +160,9 @@ input[type="text"]:focus {
   display: none;
 }
 
-.add-form.visible .add-product-button {
+/* .add-form.visible .add-product-button {
   display: none;
-}
+} */
 
 .add-form.visible h3,
 .add-form.visible form {
