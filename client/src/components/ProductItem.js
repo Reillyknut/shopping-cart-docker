@@ -41,13 +41,13 @@ const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct,
         <div className="product-details">
           <h3>{name}</h3>
           <p className="price">${cost}</p>
-          <p className={amount <= 0 ? "quantity none-left" : "quantity"}>{amount} left in stock</p>
+          <p className={quantity <= 0 ? "quantity none-left" : "quantity"}>{quantity} left in stock</p>
           <a onClick={() => onDeleteProduct(id)} href='/#' className="delete-button"><span>X</span></a>
         </div>
 
         {!isEdit ?
         <div className="actions product-actions">
-          <a href='/#' onClick={handleAddCartItem} className={amount <= 0 ? "button add-to-cart disabled" : "button add-to-cart"}>Add to Cart</a>
+          <a href='/#' onClick={handleAddCartItem} className={quantity <= 0 ? "button add-to-cart disabled" : "button add-to-cart"}>Add to Cart</a>
           <a onClick={toggleEdit} href='/#' className="button edit">Edit</a>
         </div>
         :

@@ -53,7 +53,6 @@ const App = () => {
       if (cartItem) {
         cartItem = {...object, quantity: cartItem.quantity + 1}
         setCartItems(cartItems.map(item => {
-          console.log(item, cartItem)
           return item._id === response.data.item._id ? response.data.item : item 
         }))
       } else {
@@ -63,8 +62,14 @@ const App = () => {
 
       let item = products.find(product => product._id === object.productId)
       item = {...item, quantity: item.quantity - 1}
-      setProducts(products.map(product => product._id === item._id ? item : product))
-      // debugger;
+
+      setProducts(products.map(product => {
+        if (product._id === item._id) {
+          return item
+        } else {
+          return product
+        }
+      }))
     }
   }
 
@@ -106,11 +111,4 @@ const App = () => {
 export default App;
 
 
-// add get & post /api/cart and post /api/cart/checkout
-
-// move some components into their own files
-// rename some handlers
-// prevent default on handler functions
-// extract api calls to services folder?
-
-// Add/edit/cart tests
+// Add-product/edit-product/add-to-cart tests

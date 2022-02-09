@@ -112,6 +112,10 @@ h3 {
   float: right;
 }
 
+.button.hidden {
+  display: none;
+}
+
 .actions {
   margin-top: 20px;
 }

@@ -17,11 +17,13 @@ const AddProduct = ({ onAddProduct }) => {
     onAddProduct({title, price, quantity}, reset)
   }
 
+  let addProductClass = `add-form ${addForm ? 'visible' : ''}`
+  let addButtonClass = `add-form ${addForm ? 'button hidden' : 'button add-product-button'}`
+
   const toggleAdd = () => {setAddForm(!addForm)}
 
   return (
-    <div className="add-form visible">
-      {addForm ?
+    <div className={addProductClass}>
       <div>
         <h3>Add Product</h3>
         <form>
@@ -46,9 +48,9 @@ const AddProduct = ({ onAddProduct }) => {
           </div>
         </form>
       </div>
-      :
-      <p><a href='/#' onClick={toggleAdd} className="button add-product-button">Add A Product</a></p>
-      }
+
+      <p><a href='/#' onClick={toggleAdd} className={addButtonClass}>Add A Product</a></p>
+      
     </div>
   )
 }
