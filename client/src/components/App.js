@@ -1,59 +1,87 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
+
 import Shop from './Shop'
 import Products from './Products'
 import AddProduct from './AddProduct'
-import data from '../lib/data'
 
 const App = () => {
   const [ products, setProducts ] = useState([])
   const [ cartItems, setCartItems ] = useState([])
 
   useEffect(() => {
-    setProducts(data)
+    const getProducts = async () => {
+      const response = await axios.get('/api/products')
+      setProducts(response.data)
+    }
+    getProducts()
   }, [])
 
-  // useEffect(() => {
-  //   const getProducts = async () => {
-  //     const response = await axios.get('/')
-  //     const data = response.data
-  //     setProducts(data)
-  //   }
-  //   getProducts()
-  // }, [])
+  useEffect(() => {
+    const getCartItems = async () => {
+      const response = await axios.get('/api/cart')
+      setCartItems(response.data)
+    }
+    getCartItems()
+  }, [])
 
-  // const handleEdit = () => {}
-  const handleAddProduct = (product, callback) => {
-    setProducts(products.concat(product))
-    if (callback) {
-      callback()
+  const handleEditProduct = async (id, product, callback) => {
+    const response = await axios.put(`/api/products/${id}`, product)
+
+    if (response.status === 200) {
+      setProducts(products.map(item => item._id === id ? response.data : item))
+    }
+
+    if (callback) { callback() }
+  }
+
+  const handleAddProduct = async (product, callback) => {
+    const response = await axios.post('/api/products', product)
+
+    if (response.status === 200) {
+      setProducts([...products, response.data])
+    }
+    
+    if (callback) { callback() }
+  }
+
+  const handleAddToCart = async (object) => {
+    const response = await axios.post('/api/add-to-cart', object)
+
+    if (response.status === 200) {
+      let cartItem = cartItems.find(item => item._id === response.data.item._id)
+      if (cartItem) {
+        cartItem = {...object, quantity: cartItem.quantity + 1}
+        setCartItems(cartItems.map(item => {
+          console.log(item, cartItem)
+          return item._id === response.data.item._id ? response.data.item : item 
+        }))
+      } else {
+        cartItem = {...object, quantity: 1}
+        setCartItems(cartItems.concat(cartItem))
+      }
+
+      let item = products.find(product => product._id === object.productId)
+      item = {...item, quantity: item.quantity - 1}
+      setProducts(products.map(product => product._id === item._id ? item : product))
+      // debugger;
     }
   }
 
-  const handleAddToCart = (object) => {
-    console.log(object)
-    console.log(products)
+  const handleCheckout = async () => {
+    const response = await axios.post('/api/checkout')
 
-    let cartItem = cartItems.find(item => item.title === object.title)
-    if (cartItem) {
-      cartItem = {...object, amount: cartItem.amount + 1}
-      setCartItems(cartItems.map(item => item.title === object.title ? cartItem : item ))
-    } else {
-      cartItem = {...object, amount: 1}
-      setCartItems(cartItems.concat(cartItem))
+    if (response.status === 200) {
+      setCartItems([])
     }
-
-    let item = products.find(product => product.id === object.id)
-    item = {...item, quantity: item.quantity - 1}
-    setProducts(products.map(product => product.id === item.id ? item : product))
   }
 
-  const handleCheckout = () => {
-    setCartItems([])
-  }
+  const handleDeleteProduct = async (id) => {
+    const response = await axios.delete(`/api/products/${id}`)
 
-  const handleDeleteProduct = (id) => {
-    setProducts(products.filter(product => product.id !== id))
+    if (response.status === 200) {
+      setProducts(products.filter(product => product._id !== id))
+    }
   }
   
   return (
@@ -63,7 +91,12 @@ const App = () => {
       </header>
       
       <main>
-        <Products handleAddToCart={handleAddToCart} products={products} onDeleteProduct={handleDeleteProduct}/>
+        <Products
+          onAddToCart={handleAddToCart}
+          products={products}
+          onDeleteProduct={handleDeleteProduct}
+          onEditProduct={handleEditProduct}
+        />
         <AddProduct onAddProduct={handleAddProduct} />
       </main>
     </div>
@@ -72,21 +105,12 @@ const App = () => {
 
 export default App;
 
-// Shop
-  // Cart
-// Products
-  // ProductItem
-// Add Product
 
-
-// edit product
-// add new product - done
-// delete product - done
-// add product to cart - done
-// checkout cart - done
-
-// use APIs instead
+// add get & post /api/cart and post /api/cart/checkout
 
 // move some components into their own files
 // rename some handlers
 // prevent default on handler functions
+// extract api calls to services folder?
+
+// Add/edit/cart tests

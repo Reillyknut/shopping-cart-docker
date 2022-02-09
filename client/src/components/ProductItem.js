@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 
-const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct }) => {
+const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct, onEditProduct }) => {
   const [isEdit, setIsEdit] = useState(false)
+  const [name, setTitle] = useState(title)
+  const [cost, setPrice] = useState(price)
+  const [amount, setQuantity] = useState(quantity)
 
-  const addItemToCart = () => {
+  const handleAddCartItem = () => {
     let objectToAdd = {
-      id,
+      productId: id,
       title,
       price,
     }
@@ -15,6 +18,20 @@ const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct 
     }
   }
 
+  const handleEditProduct = async (e) => {
+    e.preventDefault()
+
+    onEditProduct(
+      id,
+      {
+        title: name,
+        price: cost,
+        quantity: amount,
+      },
+      toggleEdit
+    )
+  }
+
   const toggleEdit = () => {setIsEdit(!isEdit)}
 
   return (
@@ -22,15 +39,15 @@ const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct 
       <div className="product">
 
         <div className="product-details">
-          <h3>{title}</h3>
-          <p className="price">${price}</p>
-          <p className={quantity <= 0 ? "quantity none-left" : "quantity"}>{quantity} left in stock</p>
+          <h3>{name}</h3>
+          <p className="price">${cost}</p>
+          <p className={amount <= 0 ? "quantity none-left" : "quantity"}>{amount} left in stock</p>
           <a onClick={() => onDeleteProduct(id)} href='/#' className="delete-button"><span>X</span></a>
         </div>
 
         {!isEdit ?
         <div className="actions product-actions">
-          <a href='/#' onClick={addItemToCart} className={quantity <= 0 ? "button add-to-cart disabled" : "button add-to-cart"}>Add to Cart</a>
+          <a href='/#' onClick={handleAddCartItem} className={amount <= 0 ? "button add-to-cart disabled" : "button add-to-cart"}>Add to Cart</a>
           <a onClick={toggleEdit} href='/#' className="button edit">Edit</a>
         </div>
         :
@@ -38,22 +55,22 @@ const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct 
           <h3>Edit Product</h3>
           <form>
             <div className="input-group">
-              <label for="product-name">{title}</label>
-              <input type="text" id="product-name" value={title}/>
+              <label htmlFor="product-name">{name}</label>
+              <input type="text" id="product-name" value={name} onChange={(e) => setTitle(e.target.value)}/>
             </div>
 
             <div className="input-group">
-              <label for="product-price">Price</label>
-              <input type="text" id="product-price" value={price}/>
+              <label htmlFor="product-price">Price</label>
+              <input type="text" id="product-price" value={cost} onChange={(e) => setPrice(e.target.value)}/>
             </div>
 
             <div className="input-group">
-              <label for="product-quantity">Quantity</label>
-              <input type="text" id="product-quantity" value={quantity}/>
+              <label htmlFor="product-quantity">Quantity</label>
+              <input type="text" id="product-quantity" value={amount} onChange={(e) => setQuantity(e.target.value)}/>
             </div>
 
             <div className="actions form-actions">
-              <a href='/#' className="button">Update</a>
+              <a onClick={handleEditProduct} href='/#' className="button">Update</a>
               <a onClick={toggleEdit} href='/#' className="button">Cancel</a>
             </div>
           </form>

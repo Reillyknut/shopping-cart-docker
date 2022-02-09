@@ -1,8 +1,7 @@
 import React from "react";
 
 const Cart = ({ cartItems, onCheckout }) => {
-
-
+  console.log(cartItems)
   return (
     <div className="cart">
       {cartItems.length === 0
@@ -22,10 +21,10 @@ const Cart = ({ cartItems, onCheckout }) => {
               <th>Price</th>
             </tr>
             {cartItems.map(item => // need to add id to object we make in App.js
-            <tr key={item.id}>
+            <tr key={item._id}>
               <td>{item.title}</td>
-              <td>{item.amount}</td>
-              <td>${(item.price * item.amount).toFixed(2)}</td>
+              <td>{item.quantity}</td>
+              <td>${Number(item.price * item.quantity).toFixed(2)}</td>
             </tr>  
             )}
           </tbody>
