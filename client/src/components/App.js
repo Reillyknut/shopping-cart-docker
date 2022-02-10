@@ -14,16 +14,14 @@ const App = () => {
       const response = await axios.get('/api/products')
       setProducts(response.data)
     }
-    getProducts()
-  }, [])
-
-  useEffect(() => {
     const getCartItems = async () => {
       const response = await axios.get('/api/cart')
       setCartItems(response.data)
     }
+    getProducts()
     getCartItems()
   }, [])
+
 
   const handleEditProduct = async (id, product, callback) => {
     const response = await axios.put(`/api/products/${id}`, product)
@@ -47,17 +45,15 @@ const App = () => {
 
   const handleAddToCart = async (object) => {
     const response = await axios.post('/api/add-to-cart', object)
-
     if (response.status === 200) {
-      let cartItem = cartItems.find(item => item._id === response.data.item._id)
+      let cartItem = cartItems.find(item => item.productId === response.data.item.productId)
       if (cartItem) {
-        cartItem = {...object, quantity: cartItem.quantity + 1}
+        cartItem = {...response.data.item}
         setCartItems(cartItems.map(item => {
-          return item._id === response.data.item._id ? response.data.item : item 
+          return item.productId === response.data.item.productId ? response.data.item : item
         }))
       } else {
-        cartItem = {...object, quantity: 1}
-        setCartItems(cartItems.concat(cartItem))
+        setCartItems(cartItems.concat({...response.data.item}))
       }
 
       let item = products.find(product => product._id === object.productId)
@@ -85,7 +81,7 @@ const App = () => {
     const response = await axios.delete(`/api/products/${id}`)
 
     if (response.status === 200) {
-      setProducts(products.filter(product => product._id !== id))
+      setProducts(products.filter(product => product.productId !== id))
     }
   }
   

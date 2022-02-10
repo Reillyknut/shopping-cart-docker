@@ -20,11 +20,11 @@ const Cart = ({ cartItems, onCheckout }) => {
               <th>Price</th>
             </tr>
             {cartItems.map(item =>
-            <tr key={item._id}>
-              <td>{item.title}</td>
-              <td>{item.quantity}</td>
-              <td>${Number(item.price * item.quantity).toFixed(2)}</td>
-            </tr>  
+              <tr key={item.productId}>
+                <td>{item.title}</td>
+                <td>{item.quantity}</td>
+                <td>${Number(item.price * item.quantity).toFixed(2)}</td>
+              </tr>
             )}
           </tbody>
         </table>

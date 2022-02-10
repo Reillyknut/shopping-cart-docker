@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require('cors');
 const apiRoutes = require("./routes/api");
 const uiRoutes = require("./routes/ui");
 require("dotenv").config();
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cors());
 app.use(express.static(__dirname + "/public"));
 
 app.use(bodyParser.json());
