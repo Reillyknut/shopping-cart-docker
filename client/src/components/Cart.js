@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { cartItemsReceived, checkedOut } from "../actions/cartItemsActions"
 
-const Cart = ({ cartItems, onCheckout }) => {
+const Cart = () => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cartItems)
+
+  useEffect(() => {
+    const getProducts = async () => {
+      dispatch(cartItemsReceived())
+    }
+    getProducts()
+  }, [dispatch])
+
+  const handleCheckout = async (e) => {
+    e.preventDefault()
+    dispatch(checkedOut())
+  }
+
   return (
     <div className="cart">
       {cartItems.length === 0
@@ -28,7 +45,7 @@ const Cart = ({ cartItems, onCheckout }) => {
             )}
           </tbody>
         </table>
-        <a onClick={onCheckout} href='/#' className="button checkout">Checkout</a>
+        <a onClick={handleCheckout} href='/#' className="button checkout">Checkout</a>
       </>
       }
     </div>

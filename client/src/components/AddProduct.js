@@ -1,25 +1,28 @@
 import React, { useState } from "react";
+import { productAdded } from '../actions/productsActions';
+import { useDispatch } from 'react-redux';
 
-const AddProduct = ({ onAddProduct }) => {
+const AddProduct = () => {
   const [addForm, setAddForm] = useState(false)
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
   const [quantity, setQuantity] = useState('')
+  const dispatch = useDispatch();
 
   const reset = () => {
     setTitle('')
     setPrice('')
     setQuantity('')
+    toggleAdd()
   }
 
   const handleAddProduct = (e) => {
     e.preventDefault()
-    onAddProduct({title, price, quantity}, reset)
+    dispatch(productAdded({title, price, quantity}, reset))
   }
 
   let addProductClass = `add-form ${addForm ? 'visible' : ''}`
   let addButtonClass = `add-form ${addForm ? 'button hidden' : 'button add-product-button'}`
-
   const toggleAdd = () => {setAddForm(!addForm)}
 
   return (

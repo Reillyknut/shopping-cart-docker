@@ -1,12 +1,18 @@
 import React, { useState } from "react";
+import { productDeleted, productEdited } from '../actions/productsActions';
+import { itemAdded } from "../actions/cartItemsActions"
+import { useDispatch } from 'react-redux';
 
-const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct, onEditProduct }) => {
+const ProductItem = ({ id, title, quantity, price}) => {
   const [isEdit, setIsEdit] = useState(false)
   const [name, setTitle] = useState(title)
   const [cost, setPrice] = useState(price)
   const [amount, setQuantity] = useState(quantity)
+  const dispatch = useDispatch()
 
-  const handleAddCartItem = () => {
+  const handleAddCartItem = async (e) => {
+    e.preventDefault()
+
     let objectToAdd = {
       productId: id,
       title,
@@ -14,14 +20,19 @@ const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct,
     }
 
     if (quantity > 0) {
-      onAddToCart(objectToAdd)
+      dispatch(itemAdded(objectToAdd))
     }
+  }
+
+  const handleDeleteProduct = async (e) => {
+    e.preventDefault()
+    dispatch(productDeleted(id))
   }
 
   const handleEditProduct = async (e) => {
     e.preventDefault()
 
-    onEditProduct(
+    dispatch(productEdited(
       id,
       {
         title: name,
@@ -29,7 +40,7 @@ const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct,
         quantity: amount,
       },
       toggleEdit
-    )
+    ))
   }
 
   const toggleEdit = () => {setIsEdit(!isEdit)}
@@ -42,7 +53,7 @@ const ProductItem = ({ id, title, quantity, price, onAddToCart, onDeleteProduct,
           <h3>{name}</h3>
           <p className="price">${cost}</p>
           <p className={quantity <= 0 ? "quantity none-left" : "quantity"}>{quantity} left in stock</p>
-          <a onClick={() => onDeleteProduct(id)} href='/#' className="delete-button"><span>X</span></a>
+          <a onClick={handleDeleteProduct} href='/#' className="delete-button"><span>X</span></a>
         </div>
 
         {!isEdit ?
