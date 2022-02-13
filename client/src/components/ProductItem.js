@@ -13,14 +13,8 @@ const ProductItem = ({ id, title, quantity, price}) => {
   const handleAddCartItem = async (e) => {
     e.preventDefault()
 
-    let objectToAdd = {
-      productId: id,
-      title,
-      price,
-    }
-
     if (quantity > 0) {
-      dispatch(itemAdded(objectToAdd))
+      dispatch(itemAdded(id))
     }
   }
 

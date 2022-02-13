@@ -23,7 +23,13 @@ const AddProduct = () => {
 
   let addProductClass = `add-form ${addForm ? 'visible' : ''}`
   let addButtonClass = `add-form ${addForm ? 'button hidden' : 'button add-product-button'}`
-  const toggleAdd = () => {setAddForm(!addForm)}
+
+  const toggleAdd = () => setAddForm(!addForm)
+
+  const handleToggleAdd = (e) => {
+    e.preventDefault()
+    toggleAdd()
+  }
 
   return (
     <div className={addProductClass}>
@@ -47,12 +53,12 @@ const AddProduct = () => {
 
           <div className="actions form-actions">
             <a href='/#' onClick={handleAddProduct} className="button">Add</a>
-            <a href='/#' onClick={toggleAdd} className="button">Cancel</a>
+            <a href='/#' onClick={handleToggleAdd} className="button">Cancel</a>
           </div>
         </form>
       </div>
 
-      <p><a href='/#' onClick={toggleAdd} className={addButtonClass}>Add A Product</a></p>
+      <p><a href='/#' onClick={handleToggleAdd} className={addButtonClass}>Add A Product</a></p>
       
     </div>
   )

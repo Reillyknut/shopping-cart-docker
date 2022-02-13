@@ -3,48 +3,48 @@ import axios from "axios";
 const apiClient = {
   getProducts: (callback) => {
     return axios
-      .get('/api/products')
+      .get('api/products')
       .then((response) => response.data)
       .then(callback)
       .catch((err) => console.log(err))
   },
   getCartItems: (callback) => {
     return axios
-      .get('/api/cart')
+      .get('api/cart')
       .then((response) => response.data)
       .then(callback)
       .catch((err) => console.log(err))
   },
   editProduct: (id, product, callback) => {
     return axios
-      .put(`/api/products/${id}`, product)
+      .put(`api/products/${id}`, product)
       .then((response) => response.data)
       .then(callback)
       .catch((err) => console.log(err))
   },
   addProduct: (product, callback) => {
     return axios
-      .post('/api/products', product)
+      .post('api/products', product)
       .then((response) => response.data)
       .then(callback)
       .catch((err) => console.log(err))
   },
-  addToCart: (object, callback) => {
+  addToCart: (productId, callback) => {
     return axios
-      .post('/api/add-to-cart', object)
+      .post('api/add-to-cart', { productId })
       .then((response) => response.data)
       .then(callback)
       .catch((err) => console.log(err))
   },
   checkout: (callback) => {
     return axios
-      .post('/api/checkout')
+      .post('api/checkout')
       .then(callback)
       .catch((err) => console.log(err))
   },
   deleteProduct: (id, callback) => {
     return axios
-      .delete(`/api/products/${id}`)
+      .delete(`api/products/${id}`)
       .then(callback)
       .catch((err) => console.log(err))
   },

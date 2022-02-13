@@ -8,15 +8,11 @@ export const cartItemsReceived = () => {
   }
 };
 
-export const itemAdded = (item) => {
+export const itemAdded = (productId) => {
   return (dispatch) => {
-    apiClient.addToCart(item, (itemToBeAdded) => {
-      const newCartItem = itemToBeAdded.item
-      dispatch({ type: "ITEM_ADDED", payload: { newCartItem } })
+    apiClient.addToCart(productId, ({ item, product }) => {
+      dispatch({ type: "ADDED_TO_CART", payload: { item, product } })
     })
-    // apiClient.getProducts((products) => {
-    //   dispatch({ type: "PRODUCTS_RECEIVED", payload: { products } })
-    // })
   }
 };
 

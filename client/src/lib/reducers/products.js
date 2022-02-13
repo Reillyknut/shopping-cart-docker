@@ -1,7 +1,6 @@
 const products = (state = [], action) => {
   switch (action.type) {
     case "PRODUCTS_RECEIVED": {
-      // payload: {products: data}
       return action.payload.products;
     }
     case "PRODUCT_CREATED": {

@@ -1,14 +1,13 @@
 const cartItems = (state = [], action) => {
   switch (action.type) {
     case "CART_ITEMS_RECEIVED": {
-      // payload: {cartItems: data}
       return action.payload.cartItems;
     }
-    case "ITEM_ADDED": {
-      let cartItemToBeAdded = action.payload.newCartItem
-      let cartItem = state.find(item => item.productId === cartItemToBeAdded.productId)
+    case "ADDED_TO_CART": {
+      let cartItemToBeAdded = action.payload.item
+      let cartItem = state.find(item => item._id === cartItemToBeAdded._id)
       if (cartItem) {
-        return state.map(item => item.productId === cartItemToBeAdded.productId ? cartItemToBeAdded: item );
+        return state.map(item => item._id === cartItemToBeAdded._id ? cartItemToBeAdded : item );
       } else {
         return state.concat(cartItemToBeAdded);
       }
